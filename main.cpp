@@ -31,12 +31,12 @@ int main(int , char **)
     }
 
     auto customContainerDefaultAllocator = CustomContainer<int>();
-    for (size_t i = 0; i < 10; ++i) {
+    for (size_t i = 0; i < N; ++i) {
         customContainerDefaultAllocator.emplace_back(i);
     }
 
     auto customContainerCustomAllocator = CustomContainer<int, ReserveNAllocator<int>>();
-    for (size_t i = 0; i < 10; ++i) {
+    for (size_t i = 0; i < N; ++i) {
         customContainerCustomAllocator.emplace_back(i);
         std::cout << customContainerCustomAllocator[i] << std::endl;
     }
