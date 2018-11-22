@@ -108,7 +108,7 @@ struct CustomContainer {
     : mBegin(std::exchange(other.mBegin)),
       mLast(std::move(other.mLast)),
       mEnd(std::move(other.mEnd)),
-      mAllocator(decltype(other.mAllocator)(other.mAllocator)),
+      mAllocator(other.mAllocator),
       mSize(std::exchange(other.mSize, 0)) {
     }
 
