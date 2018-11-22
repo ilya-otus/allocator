@@ -1,16 +1,17 @@
-#include "lib.h"
-#include <iostream>
-#include <string>
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_sinks.h>
-#include "custom_container.h"
-#include "reserve_allocator.h"
-
-const size_t N = 10;
-template <typename T>
-using ReserveNAllocator = ReserveAllocator<T, N>;
+//#include "lib.h"
+//#include <iostream>
+//#include <string>
+//#include <spdlog/spdlog.h>
+//#include <spdlog/sinks/stdout_sinks.h>
+//#include "custom_container.h"
+//#include "reserve_allocator.h"
+//
+//const size_t N = 10;
+//template <typename T>
+//using ReserveNAllocator = ReserveAllocator<T, N>;
 int main(int , char **)
 {
+    /*
     auto defaultContainerDefaultAllocator = std::map<int, int>();
     for (size_t i = 0; i < N; ++i) {
         if (i == 0) {
@@ -20,7 +21,6 @@ int main(int , char **)
         }
     }
 
-    /*
     auto defaultContainerCustomAllocator = std::map<int, int, std::less<int>, ReserveNAllocator<std::pair<const int, int> > >();
     for (size_t i = 0; i < N; ++i) {
         if (i == 0) {
