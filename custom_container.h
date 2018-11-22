@@ -105,11 +105,11 @@ struct CustomContainer {
     }
 
     CustomContainer(CustomContainer &&other) noexcept
-    : mBegin(std::exchange(other.mBegin)),
+    : mBegin(std::move(other.mBegin)),
       mLast(std::move(other.mLast)),
       mEnd(std::move(other.mEnd)),
       mAllocator(other.mAllocator),
-      mSize(std::exchange(other.mSize, 0)) {
+      mSize(other.mSize) {
     }
 
     CustomContainer(const CustomContainer &other)
