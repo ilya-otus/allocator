@@ -1,5 +1,6 @@
 #pragma once
 #include <iterator>
+#include <memory>
 
 template <class T, typename A = std::allocator<T> >
 struct CustomContainer {
