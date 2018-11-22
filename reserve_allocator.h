@@ -45,9 +45,10 @@ struct ReserveAllocator {
     }
 
     void deallocate(T *p, std::size_t n) {
-        (void)n;
-        if (p == mBuffer) {
-            std::free(p);
+        (void)p;
+        mLastPos -= n;
+        if (mLastPos == 0) {
+            std::free(mBuffer);
         }
     }
 

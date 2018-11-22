@@ -28,8 +28,10 @@ struct CustomContainer {
     };
     using FieldAllocator = typename std::allocator_traits<A>::template rebind_alloc<Field>;
 
+    class const_iterator;
     class iterator {
     public:
+        friend const_iterator;
         using iterator_category = std::random_access_iterator_tag;
         iterator(Field *ptr) : mData(ptr) {}
         iterator(const iterator &other) : mData(other.mData) {}
@@ -59,6 +61,7 @@ struct CustomContainer {
 
     class const_iterator {
     public:
+        friend iterator;
         using reference = typename A::const_reference;
         using pointer = typename A::const_pointer;
         using iterator_category = std::random_access_iterator_tag;
@@ -75,7 +78,10 @@ struct CustomContainer {
         bool operator!=(const iterator &other) const {
             return mData != other.mData;
         }
-        iterator operator++() {
+        bool operator!=(const_iterator &other) const {
+            return mData != other.mData;
+        }
+        const_iterator operator++() {
             mData = mData->next;
             return *this;
         }
@@ -94,16 +100,39 @@ struct CustomContainer {
       mLast(nullptr),
       mAllocator(FieldAllocator()),
       mSize(0) {
-          mEnd.value = value_type();
-          mEnd.next = nullptr;
+        mEnd.value = value_type();
+        mEnd.next = nullptr;
     }
+
+    CustomContainer(CustomContainer &&other) noexcept
+    : mBegin(std::exchange(other.mBegin)),
+      mLast(std::move(other.mLast)),
+      mEnd(std::move(other.mEnd)),
+      mAllocator(decltype(other.mAllocator)(other.mAllocator)),
+      mSize(std::exchange(other.mSize, 0)) {
+    }
+
     CustomContainer(const CustomContainer &other)
-    : mBegin(other.mBegin),
-      mLast(other.mLast),
-      mEnd(other.mEnd),
-      mAllocator(other.mAllocator),
-      mSize(other.mSize){
+    : mBegin(nullptr),
+      mAllocator(decltype(other.mAllocator)()),
+      mSize(other.mSize) {
+        for (auto field: other) {
+            auto prev = mLast;
+            mLast = mAllocator.allocate(1);
+            mAllocator.construct(&mLast->value, field);
+            if (mBegin == nullptr) {
+                mBegin = mLast;
+                mBegin->prev = nullptr;
+                mBegin->next = mLast;
+            } else {
+                prev->next = mLast;
+                mLast->prev = prev;
+                mLast->next = &mEnd;
+            }
+            mEnd.prev = mLast;
+        }
     }
+
     ~CustomContainer() {
         while (mLast->prev != nullptr) {
             mAllocator.destroy(&mLast->value);
@@ -116,7 +145,12 @@ struct CustomContainer {
     }
 
     CustomContainer &operator=(const CustomContainer &other) {
-        swap(this, other);
+        if (!empty()) {
+            this->~CustomContainer();
+        } else {
+            mAllocator.deallocate(mBegin, mSize);
+        }
+        new(this) CustomContainer(other);
         return *this;
     }
     bool operator==(const CustomContainer &other) const {
@@ -135,7 +169,7 @@ struct CustomContainer {
         return true;
     }
     bool operator!=(const CustomContainer &other) const {
-        return !(this == other);
+        return !(*this == other);
     }
     reference operator[](size_t n) {
         if (n > mSize -1) {
