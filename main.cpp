@@ -20,6 +20,7 @@ int main(int , char **)
         }
     }
 
+    /*
     auto defaultContainerCustomAllocator = std::map<int, int, std::less<int>, ReserveNAllocator<std::pair<const int, int> > >();
     for (size_t i = 0; i < N; ++i) {
         if (i == 0) {
@@ -40,5 +41,6 @@ int main(int , char **)
         customContainerCustomAllocator.emplace_back(i);
         std::cout << customContainerCustomAllocator[i] << std::endl;
     }
+    */
     return 0;
 }
