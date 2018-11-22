@@ -3,12 +3,11 @@
 #include "custom_container.h"
 #include "reserve_allocator.h"
 
-//const size_t N = 10;
-//template <typename T>
-//using ReserveNAllocator = ReserveAllocator<T, N>;
+const size_t N = 10;
+template <typename T>
+using ReserveNAllocator = ReserveAllocator<T, N>;
 int main(int , char **)
 {
-    /*
     auto defaultContainerDefaultAllocator = std::map<int, int>();
     for (size_t i = 0; i < N; ++i) {
         if (i == 0) {
@@ -38,6 +37,5 @@ int main(int , char **)
         customContainerCustomAllocator.emplace_back(i);
         std::cout << customContainerCustomAllocator[i] << std::endl;
     }
-    */
     return 0;
 }
