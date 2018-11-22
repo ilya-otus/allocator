@@ -1,4 +1,4 @@
-#include "lib.h"
+//#include "lib.h"
 #include <iostream>
 #include <string>
 #include <spdlog/spdlog.h>
@@ -6,9 +6,9 @@
 #include "custom_container.h"
 #include "reserve_allocator.h"
 
-const size_t N = 10;
-template <typename T>
-using ReserveNAllocator = ReserveAllocator<T, N>;
+//const size_t N = 10;
+//template <typename T>
+//using ReserveNAllocator = ReserveAllocator<T, N>;
 int main(int , char **)
 {
     /*
